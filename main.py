@@ -13,7 +13,7 @@
 # EV3 devices
 from devices import *
 # Native python modules
-from os.path import exists
+# from os.path import exists
 
 # Log group
 log_group = "A"
