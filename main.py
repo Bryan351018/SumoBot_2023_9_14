@@ -1,48 +1,76 @@
 #!/usr/bin/env pybricks-micropython
 """The program entry point"""
 
-# from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
-#                                  InfraredSensor, UltrasonicSensor, GyroSensor)
-# from pybricks.parameters import Port, Stop, Direction, Button, Color
-# from pybricks.tools import wait, StopWatch, DataLog
-# from pybricks.robotics import DriveBase
-# from pybricks.media.ev3dev import SoundFile, ImageFile
-
-# Pybricks mmodules
-# from pybricks.tools import wait
+# Pybricks modules
+from pybricks.tools import wait
 # EV3 devices
 from devices import *
 # Native python modules
-# from os.path import exists
+from threading import Thread
 
-# Log group
-log_group = "A"
-# Log number
-log_num = 1
-# while exists("./robot_logs/" + log_group + str(log_num) + ".log"):
-#     log_num += 1
-#     if (log_num > 1000):
-#         raise RuntimeError("Log number exceeded 1000. Please use a new log group.") 
+# Time epsilon, in ms (very small value)
+T_EPS = 10
+'''Time epsilon, in ms (very small value)'''
 
-# print("./robot_logs/" + log_group + str(log_num) + ".txt")
-# Log file
-# logfile = open("./robot_logs/" + log_group + str(log_num) + ".txt", "w+")
-'''Log file'''
+# Base driving speed
+BASE_SPEED = 100
+'''Base driving speed'''
 
-# logfile.write("Robot started")
+# Braking backward travel (mm), must be negative
+BRAKE_TRAVEL = -50
+'''Braking backward travel (mm), must be negative'''
 
 # Table turning speed (deg/s)
-table_speed = 300
+TABLE_SPEED = 100
+'''Table turning speed (deg/s)'''
+
 # Table turning angle (deg)
-table_ang = 120
-# Table turning peiod
-# table_T = table_ang / table_speed * 1000
-# print(table_T)
+TABLE_ANG = 45
+'''Table turning angle (deg)'''
 
-# Main loop
+# Table reflectivity threshold
+EDGE_THRES = 20
+'''Table reflectivity threshold'''
+
+# Radar movement cycle
+def moveRadarFunc():
+    '''Radar movement cycle'''
+    # Main turntable loop
+    while True:
+        table.run_target(TABLE_SPEED, TABLE_ANG)
+        table.run_target(-TABLE_SPEED, -TABLE_ANG)
+
+# Radar reading cycle
+def readRadarFunc():
+    # Clear screen
+    brick.screen.clear()
+    brick.screen.draw_text(0, 0, str(infprox1.distance()))
+    brick.screen.draw_text(0, 15, str(infprox1.distance()))
+    wait(500)
+
+# Drive cycle
+def driveFunc():
+    '''Drive cycle'''
+    while True:
+        # Go forward
+        base.drive(BASE_SPEED, 0)
+        # Wait for table edge
+        while L_light.reflection() > EDGE_THRES and R_light.reflection() > EDGE_THRES:
+            wait(T_EPS)
+        # Stop
+        base.straight(BRAKE_TRAVEL)
+        # Turn around
+        base.turn(180)
+
+# Start turntable
+Thread(target=moveRadarFunc).start()
+
+# Read turntable
+# Thread(target=readRadarFunc).start()
+
+# Start drive
+Thread(target=driveFunc).start()
+
+# Infinite pause to keep the program running
 while True:
-    table.run_target(table_speed, table_ang)
-    table.run_target(-table_speed, table_ang)
-
-# Close log file
-# logfile.close()
+    wait(T_EPS)
