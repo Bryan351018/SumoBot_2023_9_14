@@ -12,7 +12,7 @@ from threading import Thread
 T_EPS = 10
 '''Time epsilon, in ms (very small value)'''
 
-# Base driving speed
+# Base driving speed (mm/s)
 BASE_SPEED = 100
 '''Base driving speed'''
 
@@ -42,11 +42,12 @@ def moveRadarFunc():
 
 # Radar reading cycle
 def readRadarFunc():
-    # Clear screen
-    brick.screen.clear()
-    brick.screen.draw_text(0, 0, str(infprox1.distance()))
-    brick.screen.draw_text(0, 15, str(infprox1.distance()))
-    wait(500)
+    while True:
+        # Clear screen
+        brick.screen.clear()
+        brick.screen.draw_text(0, 0, str(infprox1.distance()))
+        brick.screen.draw_text(0, 15, str(infprox2.distance()))
+        wait(500)
 
 # Drive cycle
 def driveFunc():
