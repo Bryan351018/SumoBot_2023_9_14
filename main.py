@@ -20,40 +20,32 @@ BASE_SPEED = 100
 BRAKE_TRAVEL = -50
 '''Braking backward travel (mm), must be negative'''
 
-# Table turning speed (deg/s)
-TABLE_SPEED = 100
-'''Table turning speed (deg/s)'''
-
-# Table turning angle (deg)
-TABLE_ANG = 45
-'''Table turning angle (deg)'''
-
 # Table reflectivity threshold
 EDGE_THRES = 20
 '''Table reflectivity threshold'''
 
-# Radar movement cycle
-def moveRadarFunc():
-    '''Radar movement cycle'''
-    # Main turntable loop
-    while True:
-        table.run_target(TABLE_SPEED, TABLE_ANG)
-        table.run_target(-TABLE_SPEED, -TABLE_ANG)
+# # IR robot detection threshold (%)
+# IR_PROX_THRES = 50
+# '''IR robot detection threshold'''
 
-# Radar reading cycle
-def readRadarFunc():
+# IR robot detection speed multiple
+IR_SPD_MULT = 3
+'''IR robot detection speed multiple'''
+
+# IR proximity detection
+def proxFunc():
+    '''IR proximity detection'''
     while True:
-        # Clear screen
+        brick.screen.draw_text(0, 0, str(infprox.distance()))
+        wait(T_EPS)
         brick.screen.clear()
-        brick.screen.draw_text(0, 0, str(infprox1.distance()))
-        brick.screen.draw_text(0, 15, str(infprox2.distance()))
-        wait(500)
+
 
 # Drive cycle
 def driveFunc():
     '''Drive cycle'''
     while True:
-        # Go forward
+        # Go forward, with speed increasing as the robot gets closer
         base.drive(BASE_SPEED, 0)
         # Wait for table edge
         while L_light.reflection() > EDGE_THRES and R_light.reflection() > EDGE_THRES:
@@ -61,16 +53,13 @@ def driveFunc():
         # Stop
         base.straight(BRAKE_TRAVEL)
         # Turn around
-        base.turn(180)
-
-# Start turntable
-Thread(target=moveRadarFunc).start()
-
-# Read turntable
-# Thread(target=readRadarFunc).start()
+        base.turn(90)
 
 # Start drive
 Thread(target=driveFunc).start()
+
+# Start proximity detection
+Thread(target=proxFunc).start()
 
 # Infinite pause to keep the program running
 while True:
