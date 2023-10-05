@@ -5,6 +5,7 @@ from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import Motor, InfraredSensor, ColorSensor
 from pybricks.parameters import Port, Direction
 from pybricks.robotics import DriveBase
+import math
 
 # The brick
 brick = EV3Brick()
@@ -18,8 +19,20 @@ Lmotor = Motor(Port.B, Direction.CLOCKWISE)
 Rmotor = Motor(Port.C, Direction.CLOCKWISE)
 '''Right motor'''
 
+# Wheel diameter
+WHEEL_D = 43
+
+# Track base
+TRACK_B = 95
+
+# Wheel circumference
+whl_circ = 2 * WHEEL_D * math.pi
+
+# Track circle circumference
+trk_circ = 2 * TRACK_B * math.pi
+
 # Drive base
-base = DriveBase(Lmotor, Rmotor, 43, 95)
+base = DriveBase(Lmotor, Rmotor, WHEEL_D, TRACK_B)
 
 # Infrared proximity sensor
 infprox = InfraredSensor(Port.S2)
