@@ -32,7 +32,7 @@ whl_circ = WHEEL_D * math.pi
 trk_circ = TRACK_B * math.pi
 
 # Drive base
-base = DriveBase(Lmotor, Rmotor, WHEEL_D, TRACK_B)
+# base = DriveBase(Lmotor, Rmotor, WHEEL_D, TRACK_B)
 
 # Infrared proximity sensor
 infprox = InfraredSensor(Port.S2)
