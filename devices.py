@@ -19,17 +19,17 @@ Lmotor = Motor(Port.B, Direction.CLOCKWISE)
 Rmotor = Motor(Port.C, Direction.CLOCKWISE)
 '''Right motor'''
 
-# Wheel diameter
+# Wheel diameter (mm)
 WHEEL_D = 43
 
-# Track base
+# Track base (mm)
 TRACK_B = 95
 
 # Wheel circumference
-whl_circ = 2 * WHEEL_D * math.pi
+whl_circ = WHEEL_D * math.pi
 
 # Track circle circumference
-trk_circ = 2 * TRACK_B * math.pi
+trk_circ = TRACK_B * math.pi
 
 # Drive base
 base = DriveBase(Lmotor, Rmotor, WHEEL_D, TRACK_B)

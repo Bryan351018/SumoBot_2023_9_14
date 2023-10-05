@@ -3,23 +3,21 @@
 
 # Pybricks modules
 from pybricks.tools import wait, StopWatch
-from pybricks.parameters import Stop
 # EV3 devices
 from devices import *
 # Native python modules
 from threading import Thread
-import math
 
 # Time epsilon, in ms (very small value)
 T_EPS = 10
 '''Time epsilon, in ms (very small value)'''
 
 # Base driving speed (mm/s)
-BASE_SPEED = 100
+BASE_SPEED = 30
 '''Base driving speed'''
 
 # Braking backward travel (mm), must be negative
-BRAKE_TRAVEL = -30
+BRAKE_TRAVEL = -50
 '''Braking backward travel (mm), must be negative'''
 
 # Table reflectivity threshold
@@ -121,9 +119,9 @@ def driveFunc():
         # 1. Brake
         baseBrake()
         # 2. Reverse
-        baseDist(BASE_SPEED, BRAKE_TRAVEL)
+        baseDist(BASE_SPEED * IR_SPD_MULT, BRAKE_TRAVEL)
         # Turn around
-        baseTurn(90, 300)
+        baseTurn(90, 600)
  
 
 # Start drive
