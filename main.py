@@ -97,8 +97,8 @@ def baseBrake():
     Rmotor.brake()
 
 
-def stopFunc():
-    base.stop()
+# def stopFunc():
+#     base.stop()
 
 # Drive cycle
 def driveFunc():
